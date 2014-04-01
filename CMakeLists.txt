@@ -7,6 +7,7 @@ set(LLVM_ROOT "/usr/" CACHE PATH "Root of LLVM install.")
 # Define add_llvm_* macro's.
 include(AddLLVM)
 set(LLVM_ON_UNIX = true)
+add_definitions(-g )
 add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_ROOT}/include/llvm-3.4)
 include_directories(${LLVM_ROOT}/include/llvm-c-3.4)

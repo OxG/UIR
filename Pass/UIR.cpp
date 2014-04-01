@@ -14,6 +14,7 @@
 #include "llvm/IR/Type.h"
 #include <string>
 #include "llvm/IR/Constants.h"
+#include "llvm/Support/Casting.h"
 //#include "llvm/Support/DebugLoc.h"
 using namespace std;
 using namespace llvm;
@@ -74,12 +75,12 @@ struct Uir : public ModulePass {
     virtual bool runOnModule(llvm::Module &M) {
 
 
-        llvm::Function& mn=findfunc(M,"main");
+        llvm::Function * mn=M.getFunction("main");
 
-        dumpfheader(mn);
-            if(!mn.empty())
+        dumpfheader(*mn);
+            if(!mn->empty())
             {
-                llvm::BasicBlock * BB = &mn.getEntryBlock();
+                llvm::BasicBlock * BB = &mn->getEntryBlock();
                 Tree(BB,M);
             }
         return false;
@@ -104,6 +105,13 @@ struct Uir : public ModulePass {
                 errs().write_escaped(inn->getOpcodeName () )<<" ";
                 string tmpstr=inn->getOpcodeName ();
                 string oper;
+                Instruction * instr=inn;
+                llvm::CallInst * cins=dyn_cast_or_null<CallInst>(instr);
+                if(cins==NULL)
+                {
+                    errs()<<"--";
+                }
+
                 for (User::op_iterator i = inn->op_begin(), e = inn->op_end(); i != e; ++i)
                 {
                     Value * v = *i;
@@ -113,14 +121,19 @@ struct Uir : public ModulePass {
                 }
                 if(tmpstr.compare("call")==0)
                 {
-                    llvm::Function& insmn=findfunc(M,oper);
-                    if(insmn.getName().str().compare("main")!=0)
+                    llvm::Function* insmn=M.getFunction(oper);
+                    if(insmn==NULL)
                     {
-                       dumpfheader(insmn);
-                                if(!insmn.empty())
+                        errs()<<"Notfound";
+                    }
+                    else
+                    //if(insmn->getName().str().compare("main")!=0)
+                    {
+                       dumpfheader(*insmn);
+                                if(!insmn->empty())
 
                                 {
-                                    llvm::BasicBlock * IBB = &insmn.getEntryBlock();
+                                    llvm::BasicBlock * IBB = &insmn->getEntryBlock();
                                     Tree(IBB,M);
                                 }
                                 else
