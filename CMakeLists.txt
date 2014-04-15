@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "/usr/share/llvm-3.4/cmake")
-include(LLVMConfig)
+include(LLVMConfig OPTIONAL)
+include(LLVM-Config OPTIONAL)
 set(LLVM_ROOT "/usr/" CACHE PATH "Root of LLVM install.")
 # Define add_llvm_* macro's.
 include(AddLLVM)
