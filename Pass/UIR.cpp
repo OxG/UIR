@@ -19,6 +19,7 @@
 #include "llvm/Support/Casting.h"
 #include "llvm/Transforms/Utils/SimplifyLibCalls.h"
 #include "llvm/Analysis/LibCallSemantics.h"
+#include "llvm/IR/GlobalAlias.h"
 //#include "llvm/Support/DebugLoc.h"
 using namespace std;
 using namespace llvm;
@@ -28,6 +29,7 @@ struct Uir : public ModulePass {
     static char ID;
     Uir() : ModulePass(ID) {}
     std::set< BlockAddress* > MasBA;
+    bool hui=true;
     string  TID[20] = {
         "VoidTyID" , "HalfTyID", "FloatTyID", "DoubleTyID",
         "X86_FP80TyID", "FP128TyID", "PPC_FP128TyID", "LabelTyID",
@@ -73,12 +75,13 @@ struct Uir : public ModulePass {
     }
     bool Tree(llvm::BasicBlock * BB,llvm::Module &M)
     {
+        hui=true;
         if(MasBA.find(BlockAddress::get(BB)) != MasBA.end())
         {
             return false;
         }
         MasBA.insert(BlockAddress::get(BB));
-        errs().write_escaped("Block ")<<BlockAddress::get(BB)<<"\n";
+        //errs().write_escaped("Block ")<<BlockAddress::get(BB)<<"\n";
 
         llvm::TerminatorInst * TI;
         llvm::BasicBlock * NBB;
@@ -86,52 +89,84 @@ struct Uir : public ModulePass {
         {
             for(llvm::BasicBlock::iterator inn=BB->begin(), ine=BB->end(); inn!=ine ;++inn)
             {
-                errs().write_escaped(inn->getOpcodeName () )<<" ";
+
                 string oper;
                 Instruction * instr=inn;
                 llvm::CallInst * cins=dyn_cast_or_null<CallInst>(instr);
                 if(cins==NULL)
                 {
-                    errs()<<"--";
+
                 }
                 else
                 {
+
+                    errs().write_escaped(inn->getOpcodeName () )<<" ";
                     for (User::op_iterator i = inn->op_begin(), e = inn->op_end(); i != e; ++i)
                     {
                         Value * v = *i;
 
-                        errs().write_escaped( v->getName())<<" ";
+                        errs().write_escaped(v->getName())<<" ";
                         oper=v->getName();
+                        if( v->getName()=="fp")
+                        {
+                            hui=false;
+
+                        }
                     }
 
                     llvm::Function* insmn=cins->getCalledFunction();
 
                     if(insmn==NULL)
                     {
-                        llvm::LibCallSimplifier * LCS;
-                        Value * Val = LCS->optimizeCall(cins);
-                        errs()<<"Notfound";
-                        llvm::CallInst * cins2=dyn_cast_or_null<CallInst>(Val);
+
+                            if (cins->isInlineAsm())
+                            {
+                                errs()<<"\nINLINE\n";
+                                errs()<<*cins->getCalledValue();
+                            }
+                            else
+                            {
+                                if(hui==true)
+                                {
+                                 GlobalAlias* glal= M.getNamedAlias(cins->getCalledValue()->getName());
+                        //
+                                 Constant * newfun=glal->getAliasee();
+                        //errs().write_escaped("")<<"2";
+                                 llvm::Function * cins2=dyn_cast_or_null<Function>(newfun);
+                        //errs()<<"Notfound";
+
+                                Tree(&cins2->getEntryBlock(),M);
+
+                                }
+                        // errs()<<*cins2;
+                        // GlobalAlias* ololo=M.getNamedAlias("__GI_lseek64");
+                         //errs()<<ololo->getName();
+                             }
 
                     }
                     else
                     {
+
                         dumpfheader(*insmn);
                         if(!insmn->empty())
 
                         {
                             llvm::BasicBlock * IBB = &insmn->getEntryBlock();
+
                             Tree(IBB,M);
+
                         }
                         else
                         {
-                            errs()<<"\nebuchaya huita!\n";
+
+                            errs()<<"huita\n";
+
                         }
 
                     }
 
                 }
-                errs().write_escaped(" ")<<"\n";
+               // errs().write_escaped(" ")<<"\n";
 
             }
 
