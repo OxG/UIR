@@ -20,6 +20,7 @@
 #include "llvm/Transforms/Utils/SimplifyLibCalls.h"
 #include "llvm/Analysis/LibCallSemantics.h"
 #include "llvm/IR/GlobalAlias.h"
+#include "llvm/IR/InlineAsm.h"
 //#include "llvm/Support/DebugLoc.h"
 using namespace std;
 using namespace llvm;
@@ -29,7 +30,7 @@ struct Uir : public ModulePass {
     static char ID;
     Uir() : ModulePass(ID) {}
     std::set< BlockAddress* > MasBA;
-    bool hui=true;
+    bool isfp=true;
     string  TID[20] = {
         "VoidTyID" , "HalfTyID", "FloatTyID", "DoubleTyID",
         "X86_FP80TyID", "FP128TyID", "PPC_FP128TyID", "LabelTyID",
@@ -59,6 +60,13 @@ struct Uir : public ModulePass {
         errs().write_escaped("::CallingConv::")<<mn.getCallingConv()<<"\n";
 
     }
+    bool replace(std::string& str, const std::string& from, const std::string& to) {
+        size_t start_pos = str.find(from);
+        if(start_pos == std::string::npos)
+            return false;
+        str.replace(start_pos, from.length(), to);
+        return true;
+    }
 
     virtual bool runOnModule(llvm::Module &M) {
 
@@ -75,7 +83,7 @@ struct Uir : public ModulePass {
     }
     bool Tree(llvm::BasicBlock * BB,llvm::Module &M)
     {
-        hui=true;
+        isfp=true;
         if(MasBA.find(BlockAddress::get(BB)) != MasBA.end())
         {
             return false;
@@ -92,6 +100,7 @@ struct Uir : public ModulePass {
 
                 string oper;
                 Instruction * instr=inn;
+
                 llvm::CallInst * cins=dyn_cast_or_null<CallInst>(instr);
                 if(cins==NULL)
                 {
@@ -104,53 +113,57 @@ struct Uir : public ModulePass {
                     for (User::op_iterator i = inn->op_begin(), e = inn->op_end(); i != e; ++i)
                     {
                         Value * v = *i;
-
                         errs().write_escaped(v->getName())<<" ";
                         oper=v->getName();
-                        if( v->getName()=="fp")
-                        {
-                            hui=false;
 
-                        }
                     }
+                    string funkName;
 
                     llvm::Function* insmn=cins->getCalledFunction();
 
                     if(insmn==NULL)
                     {
-
                             if (cins->isInlineAsm())
                             {
                                 errs()<<"\nINLINE\n";
-                                errs()<<*cins->getCalledValue();
+                                //errs()<<*cins->getCalledValue();
+                                //InlineAsm * ASM =dyn_cast_or_null<InlineAsm>(cins);
+                                //errs()<<ASM->getAsmString();
                             }
                             else
                             {
-                                if(hui==true)
+                                if(M.getNamedAlias(cins->getCalledValue()->getName())!=NULL)
                                 {
                                  GlobalAlias* glal= M.getNamedAlias(cins->getCalledValue()->getName());
-                        //
+                                 funkName=glal->getName().str();
                                  Constant * newfun=glal->getAliasee();
-                        //errs().write_escaped("")<<"2";
-                                 llvm::Function * cins2=dyn_cast_or_null<Function>(newfun);
-                        //errs()<<"Notfound";
-
-                                Tree(&cins2->getEntryBlock(),M);
-
+                                 insmn=dyn_cast_or_null<Function>(newfun);
+                                 if(insmn==NULL)
+                                 {
+                                     errs()<<"Ne prokanalo";
+                                 }
+                                 else
+                                 {
+                                 Tree(&insmn->getEntryBlock(),M);
+                                 }
                                 }
-                        // errs()<<*cins2;
-                        // GlobalAlias* ololo=M.getNamedAlias("__GI_lseek64");
-                         //errs()<<ololo->getName();
                              }
 
                     }
                     else
                     {
 
+                        funkName=insmn->getName().str();
+                        if(replace(funkName,"__isoc99_",""))
+                        {
+                            errs()<<funkName;
+                           insmn=M.getFunction(funkName);
+                        }
                         dumpfheader(*insmn);
                         if(!insmn->empty())
 
                         {
+
                             llvm::BasicBlock * IBB = &insmn->getEntryBlock();
 
                             Tree(IBB,M);
