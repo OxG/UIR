@@ -131,6 +131,8 @@ struct Uir : public ModulePass {
                                 errs()<<*cins->getCalledValue();
 				errs()<<*cins->getArgOperand(0);
 				cin.get();
+                                InlineAsm * ASM =dyn_cast_or_null<InlineAsm>(cins->getCalledValue());
+                               // errs()<<ASM->getConstraintString();
                                 errs()<<"\n";
                             }
                             else

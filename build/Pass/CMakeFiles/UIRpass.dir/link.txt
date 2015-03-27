@@ -1,0 +1,1 @@
+/usr/bin/c++  -fPIC    -shared -Wl,-soname,UIRpass.so -o UIRpass.so CMakeFiles/UIRpass.dir/UIR.cpp.o  -L/usr/lib/llvm-3.4 
