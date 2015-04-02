@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/oxg/UIR/Pass/UIR.cpp" "/home/oxg/UIR/build/Pass/CMakeFiles/UIRpass.dir/UIR.cpp.o"
+  "/home/oxg/llvm/UIR/Pass/UIR.cpp" "/home/oxg/llvm/UIR/build/Pass/CMakeFiles/UIRpass.dir/UIR.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

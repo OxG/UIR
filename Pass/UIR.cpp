@@ -131,11 +131,18 @@ struct Uir : public ModulePass {
                             {
                                 errs()<<"\nINLINE\n";
                                 errs()<<*cins->getCalledValue();
+				errs()<<"\n";
                                 errs()<<*cins->getArgOperand(0);
+				errs()<<"=";
                                 llvm::ConstantInt * xxx=dyn_cast_or_null<llvm::ConstantInt>(cins->getArgOperand(0));
-                                APInt xx=xxx->getValue();
+				if(xxx!=NULL)
+				{
+					lssis=thsis;
+					thsis=xxx->getLimitedValue();
+					errs()<<thsis;
+                                }
                                 
-                                errs()<<xxx;
+				
                                 errs()<<"\n";
                             }
                             else
@@ -148,7 +155,14 @@ struct Uir : public ModulePass {
                                  insmn=dyn_cast_or_null<Function>(newfun);
                                  if(insmn==NULL)
                                  {
-                                     errs()<<"Ne prokanalo";
+				 	if(replace(funkName,"64",""))
+                        			{
+                           			 errs()<<funkName;
+                          			 insmn=M.getFunction(funkName);
+                      			  	}
+					if(insmn==NULL)
+                                     	{errs()<<"Ne prokanalo";cin.get();}
+					
                                  }
                                  else
                                  {
