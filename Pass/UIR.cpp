@@ -78,12 +78,14 @@ struct Uir : public ModulePass {
         if(!mn->empty())
         {
             llvm::BasicBlock * BB = &mn->getEntryBlock();
-            Tree(BB,M);
+            Tree(BB,M,0);
         }
+        
         return false;
     }
-    bool Tree(llvm::BasicBlock * BB,llvm::Module &M)
+    bool Tree(llvm::BasicBlock * BB,llvm::Module &M, int thsis)
     {
+        int lssis=0;
         isfp=true;
         if(MasBA.find(BlockAddress::get(BB)) != MasBA.end())
         {
@@ -129,8 +131,11 @@ struct Uir : public ModulePass {
                             {
                                 errs()<<"\nINLINE\n";
                                 errs()<<*cins->getCalledValue();
-				errs()<<*cins->getArgOperand(0);
-				cin.get();
+                                errs()<<*cins->getArgOperand(0);
+                                llvm::ConstantInt * xxx=dyn_cast_or_null<llvm::ConstantInt>(cins->getArgOperand(0));
+                                APInt xx=xxx->getValue();
+                                
+                                errs()<<xxx;
                                 errs()<<"\n";
                             }
                             else
@@ -147,7 +152,7 @@ struct Uir : public ModulePass {
                                  }
                                  else
                                  {
-                                 Tree(&insmn->getEntryBlock(),M);
+                                 Tree(&insmn->getEntryBlock(),M,thsis);
                                  }
                                 }
                              }
@@ -169,7 +174,7 @@ struct Uir : public ModulePass {
 
                             llvm::BasicBlock * IBB = &insmn->getEntryBlock();
 
-                            Tree(IBB,M);
+                            Tree(IBB,M,thsis);
 
                         }
                         else
@@ -191,7 +196,7 @@ struct Uir : public ModulePass {
             for(int i=0;i<NS;i++)
             {
                 NBB=TI->getSuccessor(i);
-                Tree(NBB,M);
+                Tree(NBB,M,thsis);
             }
         }
 
