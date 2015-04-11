@@ -47,10 +47,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/oxg/llvm/UIR
+CMAKE_SOURCE_DIR = /home/oxg/UIR
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/oxg/llvm/UIR/build
+CMAKE_BINARY_DIR = /home/oxg/UIR/build
 
 #=============================================================================
 # Directory level rules for directory Pass
@@ -74,7 +74,7 @@ Pass/preinstall:
 Pass/CMakeFiles/UIRpass.dir/all:
 	$(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/depend
 	$(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/oxg/llvm/UIR/build/CMakeFiles  1
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/oxg/UIR/build/CMakeFiles  1
 	@echo "Built target UIRpass"
 .PHONY : Pass/CMakeFiles/UIRpass.dir/all
 
@@ -84,9 +84,9 @@ all: Pass/CMakeFiles/UIRpass.dir/all
 
 # Build rule for subdir invocation for target.
 Pass/CMakeFiles/UIRpass.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/llvm/UIR/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/UIR/build/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 Pass/CMakeFiles/UIRpass.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/llvm/UIR/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/UIR/build/CMakeFiles 0
 .PHONY : Pass/CMakeFiles/UIRpass.dir/rule
 
 # Convenience name for target.

@@ -22,6 +22,7 @@
 #include "llvm/IR/GlobalAlias.h"
 #include "llvm/IR/InlineAsm.h"
 #include <iostream>
+#include <stdio.h>
 //#include "llvm/Support/DebugLoc.h"
 using namespace std;
 using namespace llvm;
@@ -32,6 +33,8 @@ struct Uir : public ModulePass {
     Uir() : ModulePass(ID) {}
     std::set< BlockAddress* > MasBA;
     bool isfp=true;
+    int sys[400][400];
+    FILE * f;
     string  TID[20] = {
         "VoidTyID" , "HalfTyID", "FloatTyID", "DoubleTyID",
         "X86_FP80TyID", "FP128TyID", "PPC_FP128TyID", "LabelTyID",
@@ -70,8 +73,14 @@ struct Uir : public ModulePass {
     }
 
     virtual bool runOnModule(llvm::Module &M) {
-
-
+          int k=0,l=0;
+          for(k=0;k<400;k++)
+          {
+            for(l=0;l<400;l++)
+            {
+              sys[k][l]=0;
+            }
+          }
         llvm::Function * mn=M.getFunction("main");
 
         dumpfheader(*mn);
@@ -80,13 +89,23 @@ struct Uir : public ModulePass {
             llvm::BasicBlock * BB = &mn->getEntryBlock();
             Tree(BB,M,0);
         }
+        f=fopen("/home/oxg/UIR/sys.mas","w+");
+      
+        for(k=0;k<400;k++)
+        {
+          for(l=0;l<400;l++)
+          {
+            fprintf(f," %d",sys[k][l]);
+          }
+        }
+        fclose(f);
         
         return false;
     }
     bool Tree(llvm::BasicBlock * BB,llvm::Module &M, int thsis)
     {
         int lssis=0;
-        isfp=true;
+        isfp=true; 
         if(MasBA.find(BlockAddress::get(BB)) != MasBA.end())
         {
             return false;
@@ -131,15 +150,16 @@ struct Uir : public ModulePass {
                             {
                                 errs()<<"\nINLINE\n";
                                 errs()<<*cins->getCalledValue();
-				errs()<<"\n";
+                                errs()<<"\n";
                                 errs()<<*cins->getArgOperand(0);
-				errs()<<"=";
+                                errs()<<"=";
                                 llvm::ConstantInt * xxx=dyn_cast_or_null<llvm::ConstantInt>(cins->getArgOperand(0));
-				if(xxx!=NULL)
-				{
-					lssis=thsis;
-					thsis=xxx->getLimitedValue();
-					errs()<<thsis;
+                                if(xxx!=NULL)
+                                {
+                                  lssis=thsis;
+                                  thsis=xxx->getLimitedValue();
+                                  sys[lssis][thsis]=1;
+                                  errs()<<thsis;
                                 }
                                 
 				
@@ -155,12 +175,12 @@ struct Uir : public ModulePass {
                                  insmn=dyn_cast_or_null<Function>(newfun);
                                  if(insmn==NULL)
                                  {
-				 	if(replace(funkName,"64",""))
+                                  if(replace(funkName,"64",""))
                         			{
                            			 errs()<<funkName;
                           			 insmn=M.getFunction(funkName);
                       			  	}
-					if(insmn==NULL)
+                                if(insmn==NULL)
                                      	{errs()<<"Ne prokanalo";cin.get();}
 					
                                  }
@@ -213,7 +233,7 @@ struct Uir : public ModulePass {
                 Tree(NBB,M,thsis);
             }
         }
-
+      
     }
 
 

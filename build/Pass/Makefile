@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/oxg/llvm/UIR
+CMAKE_SOURCE_DIR = /home/oxg/UIR
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/oxg/llvm/UIR/build
+CMAKE_BINARY_DIR = /home/oxg/UIR/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -110,14 +110,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/oxg/llvm/UIR/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/llvm/UIR/build/CMakeFiles /home/oxg/llvm/UIR/build/Pass/CMakeFiles/progress.marks
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/llvm/UIR/build/CMakeFiles 0
+	cd /home/oxg/UIR/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/UIR/build/CMakeFiles /home/oxg/UIR/build/Pass/CMakeFiles/progress.marks
+	cd /home/oxg/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/oxg/UIR/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/clean
+	cd /home/oxg/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/clean
 .PHONY : clean
 
 # The main clean target
@@ -126,22 +126,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/preinstall
+	cd /home/oxg/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/preinstall
+	cd /home/oxg/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/oxg/llvm/UIR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/oxg/UIR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 Pass/CMakeFiles/UIRpass.dir/rule:
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/CMakeFiles/UIRpass.dir/rule
+	cd /home/oxg/UIR/build && $(MAKE) -f CMakeFiles/Makefile2 Pass/CMakeFiles/UIRpass.dir/rule
 .PHONY : Pass/CMakeFiles/UIRpass.dir/rule
 
 # Convenience name for target.
@@ -150,7 +150,7 @@ UIRpass: Pass/CMakeFiles/UIRpass.dir/rule
 
 # fast build rule for target.
 UIRpass/fast:
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/build
+	cd /home/oxg/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/build
 .PHONY : UIRpass/fast
 
 UIR.o: UIR.cpp.o
@@ -158,7 +158,7 @@ UIR.o: UIR.cpp.o
 
 # target to build an object file
 UIR.cpp.o:
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/UIR.cpp.o
+	cd /home/oxg/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/UIR.cpp.o
 .PHONY : UIR.cpp.o
 
 UIR.i: UIR.cpp.i
@@ -166,7 +166,7 @@ UIR.i: UIR.cpp.i
 
 # target to preprocess a source file
 UIR.cpp.i:
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/UIR.cpp.i
+	cd /home/oxg/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/UIR.cpp.i
 .PHONY : UIR.cpp.i
 
 UIR.s: UIR.cpp.s
@@ -174,7 +174,7 @@ UIR.s: UIR.cpp.s
 
 # target to generate assembly for a file
 UIR.cpp.s:
-	cd /home/oxg/llvm/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/UIR.cpp.s
+	cd /home/oxg/UIR/build && $(MAKE) -f Pass/CMakeFiles/UIRpass.dir/build.make Pass/CMakeFiles/UIRpass.dir/UIR.cpp.s
 .PHONY : UIR.cpp.s
 
 # Help Target
@@ -204,6 +204,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/oxg/llvm/UIR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/oxg/UIR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

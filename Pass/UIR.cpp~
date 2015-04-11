@@ -32,6 +32,7 @@ struct Uir : public ModulePass {
     Uir() : ModulePass(ID) {}
     std::set< BlockAddress* > MasBA;
     bool isfp=true;
+	int sys[400][400];
     string  TID[20] = {
         "VoidTyID" , "HalfTyID", "FloatTyID", "DoubleTyID",
         "X86_FP80TyID", "FP128TyID", "PPC_FP128TyID", "LabelTyID",
@@ -70,8 +71,14 @@ struct Uir : public ModulePass {
     }
 
     virtual bool runOnModule(llvm::Module &M) {
-
-
+	int k=0,l=0;
+	for(k=0;k<400;k++)
+	{
+		for(l=0;l<400;l++)
+		{
+			sys[k][l]=0;
+		}
+	}
         llvm::Function * mn=M.getFunction("main");
 
         dumpfheader(*mn);
@@ -139,6 +146,7 @@ struct Uir : public ModulePass {
 				{
 					lssis=thsis;
 					thsis=xxx->getLimitedValue();
+					sys[lssis][thsis]=1;
 					errs()<<thsis;
                                 }
                                 
